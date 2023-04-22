@@ -66,6 +66,11 @@ module private Helpers =
                 Secret = io servicePrincipalPassword.Value
             )
 
+        let identityArgs =
+            ManagedClusterIdentityArgs(
+                Type = input (Pulumi.AzureNative.ContainerService.ResourceIdentityType.SystemAssigned)
+            )
+
         ManagedCluster(
             name,
             ManagedClusterArgs(
@@ -76,13 +81,13 @@ module private Helpers =
                 ServicePrincipalProfile = input servicePrincipalProfileArgs,
                 KubernetesVersion = input kubernetesVersion,
                 EnableRBAC = input true,
-                NodeResourceGroup = input "MC_azure-fs_my_aks"
+                Identity = input identityArgs
             )
         )
 
     let assignAcrPullRole (cluster: ManagedCluster) (registry: Registry) =
         let identityPrincipalId =
-            cluster.IdentityProfile.Apply(fun p -> p["kubeletIdentity"].ObjectId)
+            cluster.IdentityProfile.Apply(fun p -> p["kubeletidentity"].ObjectId)
 
         let clientConfig =
             Output.Create<GetClientConfigResult>(GetClientConfig.InvokeAsync())
