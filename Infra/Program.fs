@@ -4,11 +4,11 @@ open Pulumi.FSharp
 
 let infra () =
     let resourceGroup = ResourceGroup.create "my-product-infra"
-    let registry = Acr.create resourceGroup "container-registry"
+    let registry = Acr.create resourceGroup "containerRegistry"
     let registryCred = Acr.getCredentials resourceGroup registry
 
     let cluster =
-        Aks.create resourceGroup "aks-private-key" "aks-app" "aks-app" "aks-app-sp" "aks-app-sp-password" "1.26.0" 3
+        Aks.create resourceGroup "aksPrivateKey" "aksApp" "aksAppSp" "aksAppSpPassword" "aks" "1.26.0" 3
 
     Aks.assignAcrPullRole cluster registry |> ignore
 

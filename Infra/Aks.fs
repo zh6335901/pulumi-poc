@@ -56,7 +56,7 @@ module private Helpers =
                 ContainerServiceSshPublicKeyArgs(KeyData = io privateKey.PublicKeyOpenssh)
 
             ContainerServiceLinuxProfileArgs(
-                AdminUsername = input "testuser",
+                AdminUsername = input "myProductAdmin",
                 Ssh = input (ContainerServiceSshConfigurationArgs(PublicKeys = inputList [ input keyArgs ]))
             )
 
@@ -71,7 +71,7 @@ module private Helpers =
             ManagedClusterArgs(
                 ResourceGroupName = io resourceGroup.Name,
                 AgentPoolProfiles = inputList [ input nodePoolArgs ],
-                DnsPrefix = input "fsaks",
+                DnsPrefix = input "aks",
                 LinuxProfile = input linuxProfileArgs,
                 ServicePrincipalProfile = input servicePrincipalProfileArgs,
                 KubernetesVersion = input kubernetesVersion,
@@ -82,7 +82,7 @@ module private Helpers =
 
     let assignAcrPullRole (cluster: ManagedCluster) (registry: Registry) =
         let identityPrincipalId =
-            cluster.IdentityProfile.Apply(fun p -> p["kubeletidentity"].ObjectId)
+            cluster.IdentityProfile.Apply(fun p -> p["kubeletIdentity"].ObjectId)
 
         let clientConfig =
             Output.Create<GetClientConfigResult>(GetClientConfig.InvokeAsync())
