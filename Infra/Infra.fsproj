@@ -8,8 +8,8 @@
 
   <ItemGroup>
     <Compile Include="ResourceGroup.fs" />
-    <Compile Include="ContainerRegistry.fs" />
-    <Compile Include="Cluster.fs" />
+    <Compile Include="Acr.fs" />
+    <Compile Include="Aks.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
