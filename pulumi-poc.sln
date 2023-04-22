@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infra", "Infra", "{DFDAD187-FBB2-4072-A96E-7E595E2E5A39}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Infra", "Infra\Infra.fsproj", "{45D2E15E-7428-4866-9807-56B19D1848C6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{45D2E15E-7428-4866-9807-56B19D1848C6} = {DFDAD187-FBB2-4072-A96E-7E595E2E5A39}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{45D2E15E-7428-4866-9807-56B19D1848C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45D2E15E-7428-4866-9807-56B19D1848C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45D2E15E-7428-4866-9807-56B19D1848C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45D2E15E-7428-4866-9807-56B19D1848C6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
