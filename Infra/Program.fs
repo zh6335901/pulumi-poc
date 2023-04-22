@@ -12,7 +12,7 @@ let infra () =
 
     Aks.assignAcrPullRole cluster registry |> ignore
 
-    let clusterConfig = Aks.getClusterConfig cluster
+    let clusterConfig = Aks.getClusterConfig resourceGroup cluster
 
     dict [ ("resourceGroupName", resourceGroup.Name :> obj)
            ("registryLoginServer", registry.LoginServer :> obj)

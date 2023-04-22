@@ -92,16 +92,15 @@ module private Helpers =
         let clientConfig =
             Output.Create<GetClientConfigResult>(GetClientConfig.InvokeAsync())
 
-        let subscriptionId = clientConfig.Apply(fun c -> c.SubscriptionId)
-
         let acrPullRole =
-            $"subscriptions/{subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/7f951dda-4ed3-4680-a7ca-43fe172d538d"
+            clientConfig.Apply (fun c ->
+                $"subscriptions/{c.SubscriptionId}/providers/Microsoft.Authorization/roleDefinitions/7f951dda-4ed3-4680-a7ca-43fe172d538d")
 
         RoleAssignment(
             $"{registry.Name}-pull",
             RoleAssignmentArgs(
                 PrincipalId = io identityPrincipalId,
-                RoleDefinitionId = input acrPullRole,
+                RoleDefinitionId = io acrPullRole,
                 Scope = io registry.Id
             )
         )
@@ -129,11 +128,11 @@ let create
 let assignAcrPullRole cluster registry =
     Helpers.assignAcrPullRole cluster registry
 
-let getClusterConfig (cluster: ManagedCluster) =
+let getClusterConfig (resourceGroup: ResourceGroup) (cluster: ManagedCluster) =
     let userCredentials =
         ListManagedClusterUserCredentials.Invoke(
             ListManagedClusterUserCredentialsInvokeArgs(
-                ResourceGroupName = cluster.NodeResourceGroup,
+                ResourceGroupName = resourceGroup.Name,
                 ResourceName = cluster.Name
             )
         )
