@@ -1,0 +1,3 @@
+name: App
+runtime: dotnet
+description: My product application deployment
