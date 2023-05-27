@@ -18,7 +18,7 @@ let create registry =
         Image(
             "MyProductApi",
             ImageArgs(
-                ImageName = input $"pulumi-poc/MyProductApi:{version}",
+                ImageName = io (Output.Format($"{registry.Server}/MyProductApi:{version}")),
                 Build =
                     input (DockerBuildArgs(Context = "../../.", Dockerfile = "../../Source/MyProduct.Api/Dockerfile")),
                 Registry =
