@@ -2,33 +2,31 @@
 
 open Pulumi
 open Pulumi.FSharp
-open Pulumi.AzureNative.Resources
-open Pulumi.AzureNative.Storage
-open Pulumi.AzureNative.Storage.Inputs
+open Image
+
+let ioString (o: Output<obj>) = io (o.Apply(fun o -> string o))
+
+let getImageRegistry (stackRef: StackReference) =
+    let registryLoginServer = stackRef.GetOutput("registryLoginServer")
+    let registryUsername = stackRef.GetOutput("registryUsername")
+    let registryPassword = stackRef.GetOutput("registryPassword")
+
+    { Server = ioString registryLoginServer
+      Username = ioString registryUsername
+      Password = ioString registryPassword }
 
 let infra () =
-    // Create an Azure Resource Group
-    let resourceGroup = ResourceGroup("resourceGroup")
+    let org = Deployment.Instance.OrganizationName
+    let stack = Deployment.Instance.StackName
+    let infraStackRef = StackReference($"{org}/Infra/{stack}")
 
-    // Create an Azure Storage Account
-    let storageAccount =
-        StorageAccount(
-            "sa",
-            StorageAccountArgs(
-                ResourceGroupName = resourceGroup.Name,
-                Sku = input (SkuArgs(Name = SkuName.Standard_LRS)),
-                Kind = Kind.StorageV2
-            )
-        )
+    let imageRegistry = getImageRegistry infraStackRef
+    let image = Image.create imageRegistry
 
-    // Get the primary key
-    let primaryKey =
-        ListStorageAccountKeysInvokeArgs(ResourceGroupName = resourceGroup.Name, AccountName = storageAccount.Name)
-        |> ListStorageAccountKeys.Invoke
-        |> Outputs.bind (fun storageKeys -> Output.CreateSecret(storageKeys.Keys[0].Value))
+    let kubeConfig = ioString (infraStackRef.GetOutput("kubeClusterConfig"))
+    let serviceIP = Cluster.apply (io image.ImageName) kubeConfig
 
-    // Export the primary key for the storage account
-    dict [ ("connectionString", primaryKey :> obj) ]
+    dict [ ("serviceIP", serviceIP :> obj) ]
 
 [<EntryPoint>]
 let main _ = Deployment.run infra
