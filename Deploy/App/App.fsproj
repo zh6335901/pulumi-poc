@@ -17,6 +17,7 @@
     <PackageReference Include="Pulumi.Docker" Version="4.2.0" />
     <PackageReference Include="Pulumi.FSharp" Version="3.*" />
     <PackageReference Include="Pulumi.AzureNative" Version="1.*" />
+    <PackageReference Include="Pulumi.Kubernetes" Version="3.28.1" />
   </ItemGroup>
 
 </Project>
